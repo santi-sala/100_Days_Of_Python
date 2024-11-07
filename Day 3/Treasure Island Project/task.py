@@ -22,3 +22,25 @@ ____/______/______/______/______/_____"=.o|o_.--""___/______/______/______/____
 ''')
 print("Welcome to Treasure Island.")
 print("Your mission is to find the treasure.")
+
+player_choice = input('You arrive into an intersection. Type "right" to go on the Right or anything else to go on the left.\n')
+if player_choice == 'right' or player_choice == 'Right':
+    print("You fall into a hole. Game Over!!")
+    exit()
+player_choice = input('You arrived into a lake. Type "swim" to swim or anything else to wait for a boat.\n')
+if player_choice == 'swim' or player_choice == 'Swim':
+    print("You've been attacked by a trout. Game Over!! ")
+    exit()
+player_choice = input('You have three doors in front of you. Choose between "red", "blue" or "yellow"\n')
+if player_choice == 'red' or player_choice == 'Red':
+    print("You've been burned by fire. Game Over!! ")
+    exit()
+elif player_choice == 'blue' or player_choice == 'Blue':
+    print("You've been eaten by beasts. Game Over!! ")
+    exit()
+elif player_choice == 'yellow' or player_choice == 'Yellow':
+    print("Congratulation you found the treasure. You win!! ")
+    exit()
+else:
+    print("I could not understand you. You died by waiting  too long. Game Over!!")
+    exit()
