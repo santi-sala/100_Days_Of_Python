@@ -1,11 +1,10 @@
 # TODO-1: Import and print the logo from art.py when the program starts.
 import art
 print(art.logo)
+
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 # TODO-2: What happens if the user enters a number/symbol/space?
-
-
 def caesar(original_text, shift_amount, encode_or_decode):
     output_text = ""
     if encode_or_decode == "decode":
@@ -22,6 +21,7 @@ def caesar(original_text, shift_amount, encode_or_decode):
     restart = input("Would you like to try again? 'y' for YES or 'n' for NO: ')".lower())
     if restart == "y":
         globals() ["restart_cipher"] = True
+
         print("Restarting...")
     else:
         globals() ["restart_cipher"] = False
