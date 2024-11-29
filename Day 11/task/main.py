@@ -1,4 +1,6 @@
 import random, art
+from itertools import filterfalse
+
 cards = {0: ["2", 2],
          1: ["3", 3],
          2: ["4", 4],
@@ -17,15 +19,17 @@ cards = {0: ["2", 2],
 card_keys = list(cards.keys())
 dealers_dictionary = {"key": [],
                       "cards": [],
-                      "points": 0
-                      }
+                      "points": 0,
+                      "player": "Dealer"}
 players_dictionary = {"key": [],
                       "cards": [],
-                      "points": 0
-                      }
-#Starting the game
-def does_player_want_to_play():
-    start_game = input("Would you want to play a game of Blackjack? Types 'y' or 'n':\n")
+                      "points": 0,
+                      "player": "Player"}
+first_greeting = "Would you want to play a game of Blackjack? Types 'y' or 'n':\n"
+second_greeting = "Type 'y' to get another card or 'n' to pass:\n"
+#Greating the player
+def does_player_want_to_play(message):
+    start_game = input(message)
     if start_game.lower() == "y":
         return True
     elif start_game.lower() == "n":
@@ -33,9 +37,7 @@ def does_player_want_to_play():
         return False
     else:
         print("Please enter either 'y' or 'n'.")
-        does_player_want_to_play()
-
-keep_playing = does_player_want_to_play()
+        return does_player_want_to_play(message)
 
 #Get a players hand values
 def get_hands_value(hand):
@@ -60,19 +62,85 @@ def complete_dealers_hand():
     while dealers_dictionary["points"] < 17:
         get_card(dealers_dictionary)
 
-#Dealers first card
-get_card(dealers_dictionary)
-#Players first 2 cards
-get_card(players_dictionary)
-get_card(players_dictionary)
-#make sure the dealers hand is more than 17
-complete_dealers_hand()
-#while keep_playing:
+def display_cards():
+    print(f"    Your cards: {players_dictionary['cards']}. Your current score is: {players_dictionary['points']}")
+    print(f"    Dealer's first card: {dealers_dictionary['cards']}. Dealers score is: {dealers_dictionary['points']}")
 
-#Missing to write down the loop for playing!!!
+def check_bust_cards(player):
+   if player["points"] == 21:
+       print(f"BLACKJACK!! {player['player']} wins")
+       return True
+   if player["points"] > 21:
+       print(f"BUST! {player['player']} lost")
+       return True
+   else:
+       return False
 
-print(f"Dealers cards: {dealers_dictionary["cards"]}, Dealers points: {dealers_dictionary['points']}")
-print(f"Players cards: {players_dictionary["cards"]}, Players points: {players_dictionary['points']}")
+#Check winner
+def check_winner():
+    if players_dictionary["points"] == dealers_dictionary["points"]:
+        print("it's a tie... Dealer wins sorry!!")
+    elif dealers_dictionary["points"] == 21:
+        print("Dealer wins!! Black Jack Baby!!")
+    elif players_dictionary["points"] == 21:
+        print("PLAYER wins!! Black Jack!!")
+    elif dealers_dictionary["points"] > players_dictionary["points"]:
+        print("Dealer wins!!")
+    else:
+        print("PLAYER wins!!")
 
+#Player wants another card or pass
+def another_card_or_pass(message):
+    player_bust_or_not = check_bust_cards(players_dictionary)
+    if player_bust_or_not:
+        return
+    player_choice = input(message)
+    if player_choice.lower() == "y":
+        get_card(players_dictionary)
+        display_cards()
+        return another_card_or_pass(message)
+    elif player_choice.lower() == "n":
+        # Complete dealers cards
+        complete_dealers_hand()
+        display_cards()
+        dealer_bust_or_not = check_bust_cards(dealers_dictionary)
+        if dealer_bust_or_not:
+            return
+        else:
+            check_winner()
+            return
+    else:
+        print("Please enter either 'y' or 'n'.")
+        return another_card_or_pass(message)
+
+#Set each hand empty
+def empty_hands(hand):
+    for key in hand:
+        if key == "key":
+            hand[key] = []
+        elif key == "cards":
+            hand[key] = []
+        elif key == "points":
+            hand[key] = 0
+        else:
+            print(f"Shuffling back {hand[key]}'s hand.")
+
+keep_playing = does_player_want_to_play(first_greeting)
+
+while keep_playing:
+    empty_hands(dealers_dictionary)
+    empty_hands(players_dictionary)
+    print(art.logo)
+    # Dealers first card
+    get_card(dealers_dictionary)
+    # Players first 2 cards
+    get_card(players_dictionary)
+    get_card(players_dictionary)
+    #Display cards
+    display_cards()
+    #Ask player for more cards
+    another_card_or_pass(second_greeting)
+
+    keep_playing = does_player_want_to_play(first_greeting)
 
 
